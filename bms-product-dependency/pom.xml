@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.mouse.bms.product</groupId>
+        <artifactId>bms-product</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath> <!-- lookup parent from repository -->
+    </parent>
+    <artifactId>bms-product-dependency</artifactId>
+    <name>bms-product-dependency</name>
+    <description>Demo project for Spring Boot</description>
+
+    <properties>
+        <java.version>1.8</java.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.mouse.bms.customer</groupId>
+            <artifactId>bms-customer-api</artifactId>
+        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>com.mouse.bms.customer</groupId>-->
+            <!--<artifactId>bms-customer-api</artifactId>-->
+            <!--<version>0.0.1-SNAPSHOT</version>-->
+            <!--<scope>system</scope>-->
+            <!--<systemPath>/Users/mouse/Documents/mouse/business-manager-system/bms-customer/bms-customer-api/target/bms-customer-api-0.0.1-SNAPSHOT.jar</systemPath>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>com.mouse.bms.customer</groupId>-->
+            <!--<artifactId>bms-customer-common</artifactId>-->
+            <!--<version>0.0.1-SNAPSHOT</version>-->
+            <!--<scope>system</scope>-->
+            <!--<systemPath>/Users/mouse/Documents/mouse/business-manager-system/bms-customer/bms-customer-common/target/bms-customer-common-0.0.1-SNAPSHOT.jar</systemPath>-->
+        <!--</dependency>-->
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <classifier>exec</classifier>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.mouse.bms.product.dal.dao.ProductInfoDAO">
+
+    <sql id="table">
+        bms_product_info
+    </sql>
+
+    <sql id="column">
+        id, business_id, product_id, service, weight, color, inventory, sale, created_at, updated_at, deleted_at, description
+    </sql>
+
+    <resultMap id="productInfoDO" type="com.mouse.bms.product.dal.dataobject.ProductInfoDO">
+        <result column="id" property="id"/>
+        <result column="business_id" property="businessId"/>
+        <result column="product_id" property="productId"/>
+        <result column="service" property="service"/>
+        <result column="weight" property="weight"/>
+        <result column="color" property="color"/>
+        <result column="inventory" property="inventory"/>
+        <result column="sale" property="sale"/>
+        <result column="created_at" property="createdAt"/>
+        <result column="updated_at" property="updatedAt"/>
+        <result column="deleted_at" property="deletedAt"/>
+        <result column="description" property="description"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="com.mouse.bms.product.dal.dataobject.ProductInfoDO" useGeneratedKeys="true"
+            keyProperty="id">
+        INSERT INTO
+        <include refid="table"/>
+        (
+        <if test="id > 0">
+            id,
+        </if>
+        business_id, product_id, service, weight, color, inventory, sale,
+        created_at,
+        description
+        ) VALUES (
+        <if test="id > 0">
+            #{id},
+        </if>
+        #{businessId},
+        #{productId},
+        #{service},
+        #{weight},
+        #{color},
+        #{inventory},
+        #{sale},
+        #{createdAt},
+        #{description}
+        );
+    </insert>
+
+    <update id="update">
+        UPDATE
+        <include refid="table"/>
+        <set>
+            service = #{service},
+            weight = #{weight},
+            color = #{color},
+            inventory = #{inventory},
+            sale = #{sale},
+            updated_at = now(),
+            description = #{description}
+        </set>
+        WHERE business_id = #{businessId}
+        AND product_id = #{productId}
+        AND deleted_at = '1970-01-01 08:00:00'
+        LIMIT 1;
+    </update>
+
+    <select id="get" resultMap="productInfoDO">
+        SELECT
+        <include refid="column"/>
+        FROM
+        <include refid="table"/>
+        WHERE business_id = #{businessId}
+        AND product_id = #{productId}
+        AND deleted_at = '1970-01-01 08:00:00'
+        LIMIT 1;
+    </select>
+
+    <update id="plusInventory">
+        UPDATE
+        <include refid="table"/>
+        <set>
+            inventory = inventory + #{num},
+            updated_at = now(),
+        </set>
+        WHERE business_id = #{businessId}
+        AND product_id = #{productId}
+        AND deleted_at = '1970-01-01 08:00:00'
+        LIMIT 1;
+    </update>
+
+    <update id="subtractInventory">
+        UPDATE
+        <include refid="table"/>
+        <set>
+            inventory = inventory - #{num},
+            updated_at = now(),
+        </set>
+        WHERE business_id = #{businessId}
+        AND product_id = #{productId}
+        AND deleted_at = '1970-01-01 08:00:00'
+        LIMIT 1;
+    </update>
+
+</mapper>

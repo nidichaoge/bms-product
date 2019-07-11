@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.mouse.bms.product.dal.dao.CategoryDAO">
+
+    <sql id="table">
+        bms_category
+    </sql>
+
+    <sql id="column">
+        id, business_id, name, second_category_num, product_num, created_at, updated_at, deleted_at, description
+    </sql>
+
+    <resultMap id="categoryDO" type="com.mouse.bms.product.dal.dataobject.CategoryDO">
+        <result column="id" property="id"/>
+        <result column="business_id" property="businessId"/>
+        <result column="name" property="name"/>
+        <result column="second_category_num" property="secondCategoryNum"/>
+        <result column="product_num" property="productNum"/>
+        <result column="created_at" property="createdAt"/>
+        <result column="updated_at" property="updatedAt"/>
+        <result column="deleted_at" property="deletedAt"/>
+        <result column="description" property="description"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="com.mouse.bms.product.dal.dataobject.CategoryDO" useGeneratedKeys="true"
+            keyProperty="id">
+        INSERT INTO
+        <include refid="table"/>
+        (
+        <if test="id > 0">
+            id,
+        </if>
+        business_id, name,
+        <if test="secondCategoryNum != null">
+            second_category_num,
+        </if>
+        <if test="productNum != null">
+            product_num,
+        </if>
+        created_at,
+        description
+        ) VALUES (
+        <if test="id > 0">
+            #{id},
+        </if>
+        #{businessId},
+        #{name},
+        <if test="secondCategoryNum != null">
+            #{secondCategoryNum},
+        </if>
+        <if test="productNum != null">
+            #{productNum},
+        </if>
+        #{createdAt},
+        #{description}
+        );
+    </insert>
+
+    <update id="update">
+        UPDATE
+        <include refid="table"/>
+        <set>
+            name = #{name},
+            description = #{description},
+            updated_at = now()
+        </set>
+        WHERE business_id = #{businessId}
+        AND id = #{categoryId}
+        AND deleted_at = '1970-01-01 08:00:00'
+        LIMIT 1;
+    </update>
+
+    <select id="get" resultMap="categoryDO">
+        SELECT
+        <include refid="column"/>
+        FROM
+        <include refid="table"/>
+        WHERE business_id = #{businessId}
+        AND id = #{categoryId}
+        AND deleted_at = '1970-01-01 08:00:00'
+        LIMIT 1;
+    </select>
+
+    <update id="delete">
+        UPDATE
+        <include refid="table"/>
+        <set>
+            deleted_at = now()
+        </set>
+        WHERE business_id = #{businessId}
+        AND id = #{categoryId}
+        AND deleted_at = '1970-01-01 08:00:00'
+        LIMIT 1;
+    </update>
+
+    <select id="list" resultMap="categoryDO">
+        SELECT
+        <include refid="column"/>
+        FROM
+        <include refid="table"/>
+        WHERE business_id = #{businessId}
+        <if test="keyword != null">
+            AND name like CONCAT('%', #{keyword}, '%')
+        </if>
+        AND deleted_at = '1970-01-01 08:00:00'
+        ORDER BY `${orderBy}` ${order}
+        LIMIT #{page},#{pageSize}
+        ;
+    </select>
+
+    <select id="count" resultType="java.lang.Long">
+        SELECT
+        COUNT(1)
+        FROM
+        <include refid="table"/>
+        where business_id = #{businessId}
+        <if test="includeDeleted == 0">
+            AND deleted_at = '1970-01-01 08:00:00'
+        </if>
+        LIMIT 1;
+    </select>
+
+    <update id="plusProductNum">
+        UPDATE
+        <include refid="table"/>
+        <set>
+            product_num = product_num + #{num},
+            updated_at = now()
+        </set>
+        WHERE business_id = #{businessId}
+        AND id = #{categoryId}
+        AND deleted_at = '1970-01-01 08:00:00'
+        LIMIT 1;
+    </update>
+
+    <update id="subtractProductNum">
+        UPDATE
+        <include refid="table"/>
+        <set>
+            product_num = product_num - #{num},
+            updated_at = now()
+        </set>
+        WHERE business_id = #{businessId}
+        AND id = #{categoryId}
+        AND deleted_at = '1970-01-01 08:00:00'
+        LIMIT 1;
+    </update>
+
+    <update id="plusSecondCategoryNum">
+        UPDATE
+        <include refid="table"/>
+        <set>
+            second_category_num = second_category_num + #{num},
+            updated_at = now()
+        </set>
+        WHERE business_id = #{businessId}
+        AND id = #{categoryId}
+        AND deleted_at = '1970-01-01 08:00:00'
+        LIMIT 1;
+    </update>
+
+    <update id="subtractSecondCategoryNum">
+        UPDATE
+        <include refid="table"/>
+        <set>
+            second_category_num = second_category_num - #{num},
+            updated_at = now()
+        </set>
+        WHERE business_id = #{businessId}
+        AND id = #{categoryId}
+        AND deleted_at = '1970-01-01 08:00:00'
+        LIMIT 1;
+    </update>
+</mapper>
